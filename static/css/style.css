@@ -1,0 +1,11 @@
+
+h1 {
+    color: #ff0000;
+    font-size: 20px;
+}
+
+div {
+  max-width: 600px;
+  margin: 0 auto;
+    color: blue;
+}

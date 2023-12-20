@@ -17,7 +17,7 @@ def get_current_year():
 
 
 @app.get("/", response_class=HTMLResponse)
-def read_bibliography(request: Request, bibliography: str = Query(None)):
+async def read_bibliography(request: Request, bibliography: str = Query(None)):
     current_year = get_current_year()
     return templates.TemplateResponse(
         "index.html",
@@ -30,7 +30,7 @@ def read_bibliography(request: Request, bibliography: str = Query(None)):
 
 
 @app.post("/create_bibliography", response_class=HTMLResponse)
-def create_bibliography(
+async def create_bibliography(
     bibliography: str = Form(...),
 ):
     if not bibliography:
@@ -38,8 +38,8 @@ def create_bibliography(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Bibliography cannot be empty",
         )
-    result = ArticleConverter(bibliography).get_translation()
-    print(result)
+    result = ArticleConverter(bibliography).get_bibliography()
+
     return RedirectResponse(
         url=f"/?bibliography={result}",
         status_code=status.HTTP_302_FOUND,

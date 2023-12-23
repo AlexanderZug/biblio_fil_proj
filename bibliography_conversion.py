@@ -1,15 +1,35 @@
 import re
+from abc import ABC, abstractmethod
+
 from googletrans import Translator
 from transliterate import translit
 
 
-class ArticleConverter:
-    AUTHOR_REGEX = re.compile(r"^([\w\.]+\s[\w\.]+)")
-    TITLE_REGEX = re.compile(r"\.\s([\w\s\.,–]+)\s//")
-    JOURNAL_REGEX = re.compile(r"\/\/\s*([^/]+)\.\s*(\d{4})")
+class BibliographyConverter(ABC):
+    def __init__(self, bibliography: str):
+        self.bibliography = bibliography
+
+    @abstractmethod
+    def get_translation(self) -> dict[str, str]:
+        pass
+
+    @abstractmethod
+    def get_transliteration(self) -> dict[str, str]:
+        pass
+
+    @abstractmethod
+    def get_bibliography(self) -> str:
+        pass
+
+
+class ArticleConverter(BibliographyConverter):
+    AUTHOR_REGEX = re.compile(r"^([\w\.,–\s]+)\.")
+    TITLE_REGEX = re.compile(r"\.\s(.+?)\s//")
+    JOURNAL_REGEX = re.compile(r"\/\/\s*([^/\\]+)[\.:]+\s*(\d{4})")
     YEAR_REGEX = re.compile(r"(\d{4})\.")
     ISSUE_REGEX = re.compile(r"(?:No|№)\s*(\d+)\.")
-    PAGES_REGEX = re.compile(r'С\.\s([\w\s\.,–-]+)\.')
+    PAGES_REGEX = re.compile(r'С\.\s([\w\s\.,–\u2013-]+)\.')
+
 
     def __init__(self, article: str):
         self.author = self.AUTHOR_REGEX.search(article)
@@ -47,5 +67,22 @@ class ArticleConverter:
 
             return result_str
         except AttributeError as e:
-            # Handle attribute errors (e.g., if a regex pattern does not match)
-            return f"Error: {e}"
+            return (
+                "Библиография прописана некорректно. "
+                "Допустимый формат: Фамилия И.О. Название статьи // Название журнала. Год. №. С. 1–10. "
+                "или Фамилия И.О. Название статьи // Название журнала. Год. No. С. 1–10."
+                    )
+
+
+class BookConverter(BibliographyConverter):
+    def __init__(self, book: str):
+        self.book = book
+
+    def get_translation(self) -> dict[str, str]:
+        pass
+
+    def get_transliteration(self) -> dict[str, str]:
+        pass
+
+    def get_bibliography(self) -> str:
+        pass

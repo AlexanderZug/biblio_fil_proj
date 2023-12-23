@@ -14,36 +14,42 @@
         <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
         <span class="fs-4"><strong>Bazhoff</strong></span>
       </a>
-
-      <ul class="nav nav-pills">
-        <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Home</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">Features</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">FAQs</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">About</a></li>
-      </ul>
     </header>
   </div>
-    <div class="container">
-      <form method="post" action="/create_bibliography">
+    <div class="container mt-5">
+      <form method="post" action="/create_article">
         <div class="input-group mb-3">
-          <input type="text" class="form-control" name="bibliography" required placeholder="Введите библиографическую единицу" aria-label="Recipient's username" aria-describedby="button-addon2">
+          <input type="text" class="form-control" name="bibliography" required placeholder="Введите библиографическую единицу (статья)" aria-describedby="button-addon2">
           <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Преобразовать</button>
         </div>
       </form>
     </div>
     <div class="container">
       <div>
-        {% if bibliography %}
-          <p>Received Bibliography: {{ bibliography }}</p>
+        {% if source_type == "article" %}
+          <p>{{ article_bibliography }}</p>
+        {% endif %}
+      </div>
+    </div>
+
+      <div class="container mt-5">
+      <form method="post" action="/create_book">
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" name="bibliography" required placeholder="Введите библиографическую единицу (монография)" aria-describedby="button-addon2">
+          <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Преобразовать</button>
+        </div>
+      </form>
+    </div>
+    <div class="container">
+      <div>
+        {% if source_type == "book" %}
+          <p>{{ book_bibliography }}</p>
         {% endif %}
       </div>
     </div>
 
   <div class="container">
     <footer class="py-3 my-4">
-      <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Home</a></li>
-      </ul>
       <p class="nav justify-content-center"><a href="https://github.com/AlexanderZug" target="_blank">©
         Copyright | AlexanderZug {{ current_year }}</a></p>
     </footer>

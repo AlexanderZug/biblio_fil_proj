@@ -5,7 +5,7 @@ from fastapi.templating import Jinja2Templates
 from starlette.staticfiles import StaticFiles
 from starlette import status
 
-from bibliography_conversion import ArticleConverter
+from bibliography_conversion import ArticleConverter, BookConverter
 
 app = FastAPI(max_body_size=1000000)
 templates = Jinja2Templates(directory="templates")
@@ -17,20 +17,26 @@ def get_current_year():
 
 
 @app.get("/", response_class=HTMLResponse)
-async def read_bibliography(request: Request, bibliography: str = Query(None)):
+async def read_bibliography(
+        request: Request,
+        bibliography: str = Query(None),
+        source_type: str = Query(None)
+):
     current_year = get_current_year()
     return templates.TemplateResponse(
         "index.html",
         {
             "request": request,
             "current_year": current_year,
-            "bibliography": bibliography,
+            "source_type": source_type,
+            "article_bibliography": bibliography if source_type == "article" else "",
+            "book_bibliography": bibliography if source_type == "book" else "",
         }
     )
 
 
-@app.post("/create_bibliography", response_class=HTMLResponse)
-async def create_bibliography(
+@app.post("/create_article", response_class=HTMLResponse)
+async def create_article_bibliography(
     bibliography: str = Form(...),
 ):
     if not bibliography:
@@ -41,6 +47,23 @@ async def create_bibliography(
     result = ArticleConverter(bibliography).get_bibliography()
 
     return RedirectResponse(
-        url=f"/?bibliography={result}",
+        url=f"/?bibliography={result}&source_type=article",
+        status_code=status.HTTP_302_FOUND,
+    )
+
+
+@app.get("/create_book", response_class=HTMLResponse)
+async def create_book_bibliography(
+    bibliography: str = Form(...),
+):
+    if not bibliography:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Bibliography cannot be empty",
+        )
+    result = BookConverter(bibliography).get_bibliography()
+
+    return RedirectResponse(
+        url=f"/?bibliography={result}&source_type=book",
         status_code=status.HTTP_302_FOUND,
     )

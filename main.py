@@ -7,6 +7,7 @@ from starlette import status
 
 from bibliography_conversion import ArticleConverter, BookConverter
 
+
 app = FastAPI(max_body_size=1000000)
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -39,11 +40,6 @@ async def read_bibliography(
 async def create_article_bibliography(
     bibliography: str = Form(...),
 ):
-    if not bibliography:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Bibliography cannot be empty",
-        )
     result = ArticleConverter(bibliography).get_bibliography()
 
     return RedirectResponse(
@@ -52,15 +48,10 @@ async def create_article_bibliography(
     )
 
 
-@app.get("/create_book", response_class=HTMLResponse)
+@app.post("/create_book", response_class=HTMLResponse)
 async def create_book_bibliography(
     bibliography: str = Form(...),
 ):
-    if not bibliography:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Bibliography cannot be empty",
-        )
     result = BookConverter(bibliography).get_bibliography()
 
     return RedirectResponse(

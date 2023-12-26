@@ -19,9 +19,7 @@ def get_current_year():
 
 @app.get("/", response_class=HTMLResponse)
 async def read_bibliography(
-        request: Request,
-        bibliography: str = Query(None),
-        source_type: str = Query(None)
+    request: Request, bibliography: str = Query(None), source_type: str = Query(None)
 ):
     current_year = get_current_year()
     return templates.TemplateResponse(
@@ -32,7 +30,7 @@ async def read_bibliography(
             "source_type": source_type,
             "article_bibliography": bibliography if source_type == "article" else "",
             "book_bibliography": bibliography if source_type == "book" else "",
-        }
+        },
     )
 
 

@@ -1,0 +1,72 @@
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.error-page {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+}
+
+.container-error {
+    max-width: 600px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.not-found {
+    color: #ff6347;
+}
+
+.error-message-not-found {
+    color: #333;
+}
+
+.page-redirect {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.server-error {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+}
+
+.container-server-error {
+    max-width: 600px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.error-title {
+    color: #dc3545;
+}
+
+.error-message {
+    color: #333;
+}
+
+.error-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}

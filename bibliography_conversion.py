@@ -93,7 +93,7 @@ class BookConverter(BibliographyConverter):
         translator = Translator()
 
         title_translation = translator.translate(
-            " ".join(self.title.group(1).split()[1:-1]), dest="en"
+            " ".join(self.title.group(1).split()[1:-1])[:-1], dest="en"
         ).text
         city = self.city.group(1).split()[-1]
         cities = {"М.": "Moscow", "СПб.": "Saint Petersburg", "Л.": "Leningrad"}
@@ -111,7 +111,7 @@ class BookConverter(BibliographyConverter):
     def get_transliteration(self) -> dict[str, str]:
         author_translit = translit(self.author.group(1), "ru", reversed=True)
         title_translit = translit(
-            " ".join(self.title.group(1).split()[1:-1]), "ru", reversed=True
+            " ".join(self.title.group(1).split()[1:-1])[:-1], "ru", reversed=True
         )
         publish_house_translit = translit(
             self.publish_house.group(1), "ru", reversed=True
@@ -140,5 +140,5 @@ class BookConverter(BibliographyConverter):
             return (
                 "Библиография прописана некорректно. "
                 "Допустимый формат: Фамилия И.О. Название книги. Город: Издательство, Год. 100 c. "
-                "В настоящий момент рекомендуется избегать употребления двоеточия - : - в названии монографии"
+                "В настоящий момент рекомендуется избегать употребления двоеточия - : - в названии монографии."
             )

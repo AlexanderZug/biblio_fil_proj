@@ -13,24 +13,24 @@ templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
-def get_current_year():
+def get_current_year() -> int:
     return arrow.now().year
 
 
 @app.exception_handler(404)
-async def not_found(request, exc):
+async def not_found(request, exc)  -> HTMLResponse:
     return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
 
 
 @app.exception_handler(500)
-async def internal_server_error(request, exc):
+async def internal_server_error(request, exc) -> HTMLResponse:
     return templates.TemplateResponse("500.html", {"request": request}, status_code=500)
 
 
 @app.get("/", response_class=HTMLResponse)
 async def read_bibliography(
     request: Request, bibliography: str = Query(None), source_type: str = Query(None)
-):
+) -> HTMLResponse:
     current_year = get_current_year()
     return templates.TemplateResponse(
         "index.html",
@@ -47,7 +47,7 @@ async def read_bibliography(
 @app.post("/create_article", response_class=HTMLResponse)
 async def create_article_bibliography(
     bibliography: str = Form(...),
-):
+) -> HTMLResponse:
     result = ArticleConverter(bibliography).get_bibliography()
 
     return RedirectResponse(
@@ -59,7 +59,7 @@ async def create_article_bibliography(
 @app.post("/create_book", response_class=HTMLResponse)
 async def create_book_bibliography(
     bibliography: str = Form(...),
-):
+) -> HTMLResponse:
     result = BookConverter(bibliography).get_bibliography()
 
     return RedirectResponse(

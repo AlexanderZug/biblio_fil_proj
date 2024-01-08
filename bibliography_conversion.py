@@ -22,7 +22,7 @@ class BibliographyConverter(ABC):
         pass
 
 
-class ArticleConverter(BibliographyConverter):
+class Article(BibliographyConverter):
     AUTHOR_REGEX = re.compile(r"^([\w\.,–\s]+)\.")
     TITLE_REGEX = re.compile(r"\.\s(.+?)\s//")
     JOURNAL_REGEX = re.compile(r"\/\/\s*([^/\\]+)[\.:]+\s*(\d{4})")
@@ -73,7 +73,7 @@ class ArticleConverter(BibliographyConverter):
             )
 
 
-class BookConverter(BibliographyConverter):
+class Book(BibliographyConverter):
     AUTHOR_REGEX = re.compile(r"^([^\.]+\.[^\.]+)\.")
     TITLE_REGEX = re.compile(r"\.\s*([\w\s\.,:–!?;\"\'«»„“”‘’-]+)\s*[^:]*:")
     PUBLISH_HOUSE_REGEX = re.compile(r":\s*([^0-9]+)\d{4}")

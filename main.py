@@ -1,11 +1,12 @@
 import arrow
+
 from fastapi import FastAPI, Request, Form, Query, Depends, HTTPException
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from starlette.staticfiles import StaticFiles
 from starlette import status
 
-from bibliography_conversion import ArticleConverter, BookConverter
+from bibliography_conversion import Article, Book
 
 
 app = FastAPI(max_body_size=1000000)
@@ -18,7 +19,7 @@ def get_current_year() -> int:
 
 
 @app.exception_handler(404)
-async def not_found(request, exc)  -> HTMLResponse:
+async def not_found(request, exc) -> HTMLResponse:
     return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
 
 
@@ -48,7 +49,7 @@ async def read_bibliography(
 async def create_article_bibliography(
     bibliography: str = Form(...),
 ) -> HTMLResponse:
-    result = ArticleConverter(bibliography).get_bibliography()
+    result = Article(bibliography).get_bibliography()
 
     return RedirectResponse(
         url=f"/?bibliography={result}&source_type=article",
@@ -60,7 +61,7 @@ async def create_article_bibliography(
 async def create_book_bibliography(
     bibliography: str = Form(...),
 ) -> HTMLResponse:
-    result = BookConverter(bibliography).get_bibliography()
+    result = Book(bibliography).get_bibliography()
 
     return RedirectResponse(
         url=f"/?bibliography={result}&source_type=book",
